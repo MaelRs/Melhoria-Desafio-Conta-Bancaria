@@ -36,19 +36,19 @@ def depositar(saldo,valor_deposito, extrato,/):
 
 
 def sacar(*,saldo, valor_saque,extrato,limite,numero_saques,limite_saques):
-    if valor_saque>saldo:
+    if numero_saques>=limite_saques:
+        print('\033[1;30;41m Operação falhou!Você excedeu o número diário para saques. \033[m')    
+    elif valor_saque>saldo:
         print('\033[1;30;41m Operação falhou!Valor informado excede o saldo disponível para saque.\033[m')
-    elif valor_saque<=0:
-        print('\033[1;30;41m VALOR INVÁLIDO! INFORME UM VALOR VÁLIDO! \033[m')
     elif valor_saque>limite:
         print('\033[1;30;41m Operação falhou!Valor informado excede o limite para saque.\033[m')
-    elif numero_saques>limite_saques:
-        print('\033[1;30;41m Operação falhou!Você excedeu o número diário para saques.')
-    else:
+    elif valor_saque>0 and numero_saques<=limite_saques:
         print(f'\033[1;31;42m Saque de R${valor_saque:.2f} efetuado com sucesso! \033[m')
         numero_saques+=1
         saldo-=valor_saque
         extrato+= f'Saque:\t\t\tR$ {valor_saque:.2f}\n'
+    else:
+        print('\033[1;30;41m VALOR INVÁLIDO! INFORME UM VALOR VÁLIDO! \033[m')
     return saldo, extrato
    
 
@@ -95,16 +95,14 @@ def listar_contas(contas):
         C/C:\t\t{conta['numero_conta']}
         Titular:\t{conta['usuario']['nome']}
         '''
-        print('x'*100)
+        print('x'*50)
         print(textwrap.dedent(linha))
         
-
 
 def sair():
     linha()
     print('\033[1;31;42m Obrigado por usar os serviços do Banco Ismael!\n Até a próxima.\033[m')
     linha()
-    
 
 
 def main():
@@ -146,7 +144,6 @@ def main():
 
         elif opcao==7:
             sair()
-            #print('\033[1;31;42m Obrigado por usar os serviços do Banco Ismael!\n Até a próxima.\033[m')
             break
         else:
             print('\033[1;30;41m Opção inválida! Tente novamente.\033[m')
